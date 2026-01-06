@@ -31,4 +31,15 @@ public class GameController {
     public Player getWinner(Game game){
         return game.getWinner();
     }
+
+    public void printBoard(Game game) {
+        game.printBoard();
+    }
+    public void unDo(Game game){
+        game.unDo();
+    }
+
+    public Player getCurrentPlayer(Game game) {
+       return game.getCurrentPlayer();
+    }
 }

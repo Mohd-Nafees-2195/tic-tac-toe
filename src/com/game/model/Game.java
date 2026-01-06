@@ -42,15 +42,18 @@ public class Game {
     }
 
     public GameState makeMove() throws InvalidMoveException {
-        System.out.println("Enter the cell coordinates : ");
-        int row=scanner.nextInt();
-        int col=scanner.nextInt();
+
+        Player currPlayer=players.get(nextPlayerIndex);
+        Cell selectedCell=currPlayer.selectCell(board);
+        int row=selectedCell.getRow();
+        int col=selectedCell.getColumn();
         //Checking for valid move;
         if(!isValidMove(row,col)){
             throw new InvalidMoveException("Move is not valid");
         }
         Cell currCell=board.getCells().get(row).get(col);
         currCell.setCellState(CellState.FILLED);
+        currCell.setPlayer(currPlayer);
         Move newMove=new Move(players.get(nextPlayerIndex),currCell);
         moves.add(newMove);
         //Checking for winning
@@ -76,6 +79,36 @@ public class Game {
         }
         return false;
     }
+
+    public void printBoard() {
+        board.printBoard();
+    }
+
+    public void unDo() {
+
+        if(moves.size()==0){
+            System.out.println("Invalid Action");
+            return;
+        }
+        Move move=moves.get(moves.size()-1);
+        moves.remove(move);
+
+        //Update the board
+        Cell cell=move.getCell();
+        cell.setCellState(CellState.EMPTY);
+        cell.setPlayer(null);
+
+        //undo winning strategies
+        for(WinningStrategies  strategy: strategies){
+            strategy.unDo(move,board.getDimensions());
+        }
+
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(nextPlayerIndex);
+    }
+
     /**
       Creating Instance using Builder Pattern
      * */

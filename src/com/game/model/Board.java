@@ -28,4 +28,18 @@ public class Board {
     public List<List<Cell>> getCells() {
         return cells;
     }
+
+    public void printBoard() {
+            //[[],[],[],[]...]
+            for(List<Cell> cells: cells){
+                for(Cell cell: cells){
+                    if(cell.getCellState().equals(CellState.EMPTY)){
+                        System.out.print("|   |"); //|  |
+                    }else{
+                        System.out.print("| " + cell.getPlayer().getSymbol().getSymbol() + " |"); // | O |
+                    }
+                }
+                System.out.println();
+            }
+    }
 }

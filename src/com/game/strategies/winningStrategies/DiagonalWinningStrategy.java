@@ -2,6 +2,7 @@ package com.game.strategies.winningStrategies;
 
 
 import com.game.model.Board;
+import com.game.model.Cell;
 import com.game.model.Move;
 import com.game.model.Symbol;
 
@@ -11,27 +12,35 @@ import java.util.Objects;
 
 public class DiagonalWinningStrategy implements WinningStrategies{
 
-    Map<Integer, Map<Symbol,Integer>> diagonalHashMap=new HashMap<>();
+    Map<Symbol,Integer> diagonalMap=new HashMap<>();
+    Map<Symbol,Integer> rDiagonalMap=new HashMap<>();
     @Override
     public boolean checkWinningStrategy(Board board, Move move) {
         Integer row=move.getCell().getRow();
         Integer column=move.getCell().getColumn();
         Symbol symbol=move.getPlayer().getSymbol();
-        if(diagonalHashMap.isEmpty()){
-            diagonalHashMap.put(1,new HashMap<>());
-            diagonalHashMap.put(2,new HashMap<>());
-        }
-        //if(Objects.equals(row, column) ||Objects.equals(row+column, board.getDimensions()-1)){
             if(Objects.equals(row, column)){
-                diagonalHashMap.get(1).put(symbol,diagonalHashMap.get(1).getOrDefault(symbol,0)+1);
-                if (Objects.equals(diagonalHashMap.get(1).get(symbol), board.getDimensions()))
-                    return true;
+                diagonalMap.put(symbol,diagonalMap.getOrDefault(symbol,0)+1);
+                if (Objects.equals(diagonalMap.get(symbol), board.getDimensions())) return true;
             }
             if(Objects.equals(row+column, board.getDimensions()-1)){
-                diagonalHashMap.get(2).put(symbol,diagonalHashMap.get(2).getOrDefault(symbol,0)+1);
-                return Objects.equals(diagonalHashMap.get(2).get(symbol), board.getDimensions());
+                rDiagonalMap.put(symbol,rDiagonalMap.getOrDefault(symbol,0)+1);
+                if (Objects.equals(rDiagonalMap.get(symbol), board.getDimensions())) return true;
             }
-        //}
         return false;
+    }
+
+    @Override
+    public void unDo(Move move, int dimension) {
+        Cell cell=move.getCell();
+        int row=cell.getRow();
+        int col=cell.getColumn();
+        Symbol symbol=move.getPlayer().getSymbol();
+        if(row==col){
+            diagonalMap.put(symbol,diagonalMap.get(symbol)-1);
+        }
+        if(row+col==dimension-1){
+            rDiagonalMap.put(symbol,rDiagonalMap.get(symbol)-1);
+        }
     }
 }

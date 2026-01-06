@@ -5,4 +5,5 @@ import com.game.model.Move;
 
 public interface WinningStrategies {
     boolean checkWinningStrategy(Board board, Move move);
+    void unDo(Move move,int dimension);
 }

@@ -1,6 +1,7 @@
 package com.game.strategies.winningStrategies;
 
 import com.game.model.Board;
+import com.game.model.Cell;
 import com.game.model.Move;
 import com.game.model.Symbol;
 
@@ -20,5 +21,14 @@ public class RowWinningStrategy implements WinningStrategies{
         }
         rowHashMap.get(row).put(symbol,rowHashMap.get(row).getOrDefault(symbol,0)+1);
         return Objects.equals(rowHashMap.get(row).get(symbol), board.getDimensions());
+    }
+
+    @Override
+    public void unDo(Move move, int dimension) {
+        Cell cell=move.getCell();
+        int row=cell.getRow();
+        Symbol symbol=move.getPlayer().getSymbol();
+        Map<Symbol,Integer> rowMap=rowHashMap.get(row);
+        rowMap.put(symbol,rowMap.get(symbol)-1);
     }
 }
