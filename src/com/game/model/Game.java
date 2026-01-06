@@ -98,7 +98,7 @@ public class Game {
         cell.setCellState(CellState.EMPTY);
         cell.setPlayer(null);
 
-        nextPlayerIndex=(nextPlayerIndex-1+players.size())%players.size()
+        nextPlayerIndex=(nextPlayerIndex-1+players.size())%players.size();
         //undo winning strategies
         for(WinningStrategies  strategy: strategies){
             strategy.unDo(move,board.getDimensions());
